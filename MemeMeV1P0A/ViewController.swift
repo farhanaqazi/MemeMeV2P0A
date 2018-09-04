@@ -61,26 +61,41 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 /////**************************************** END:  Textfield manipulation block  **********************************************************
     
     
-    // MARK: Step4:  viewDidLoad Called with both textfield delegates, code to enable camera button & Text Attribute
+    // MARK: Step4.1:  viewDidLoad Called with both textfield delegates, code to enable camera button & Text Attribute
     override func viewDidLoad() {
         super.viewDidLoad()
         topText.delegate = self
         bottomText.delegate = self
+        
+        configureTextFields(textField: topText, text: "TOP TEXT")
+        configureTextFields(textField: bottomText, text: "BOTTOM TEXT")
+        
         print("View Did Load- Camera Button hss been disabled")
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         
         
-        //Handles and assigns default text attrubutes to newly defined text attribute Dictionary in Step 2
-        topText.text = "TOP"
-        bottomText.text = "BOTTOM"
-        topText.defaultTextAttributes = memeTextV1
-        bottomText.defaultTextAttributes = memeTextV1
-        topText.textAlignment = NSTextAlignment.center
-        bottomText.textAlignment = NSTextAlignment.center
+//
+//        topText.text = "TOP"
+//        bottomText.text = "BOTTOM"
+//        topText.defaultTextAttributes = memeTextV1
+//        bottomText.defaultTextAttributes = memeTextV1
+//        topText.textAlignment = NSTextAlignment.center
+//        bottomText.textAlignment = NSTextAlignment.center
         
         ImagePickerView.contentMode = .scaleAspectFit
         
     }
+    //MARK: Step4.2: Configuring text fields function, Handles and assigns default
+    // text attrubutes to newly defined text attribute Dictionary in Step 2
+
+    func configureTextFields(textField: UITextField, text: String!){
+        textField.defaultTextAttributes = memeTextV1
+        textField.textAlignment = .center
+        textField.borderStyle = UITextBorderStyle.none
+        textField.backgroundColor = UIColor.clear
+        textField.text = text
+    }
+    
 /////********************************************Start *********************************************************
     
     // MARK: Step5:  Code for Keyboard Adjustments
@@ -116,6 +131,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func unsubscribeFromKeyboardNotifications() {
         print("Unsubscribed from keyboard called")
         NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: .UIKeyboardWillHide, object: nil)
+        
     }
     
     // MARK: Step7b: viewWillDisappear This method ,Un-subscribes  to keyboard notifications
@@ -136,45 +153,51 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     // MARK: Step7d: Shows KeyBoard and calls the method defined earlier getkeyboardheight
     @objc func keyboardWillShow(_ notification:Notification) {
+        if bottomText.isFirstResponder{
         
         view.frame.origin.y -= getKeyboardHeight(notification: notification as NSNotification)
     }
-    
+    }
     // MARK: Step7e: This method Hides the keyboard
-    @objc func keyboardWillHide(notification: NSNotification) {
+    @objc func keyboardWillHide(notification: NSNotification)
+        
+    {
         view.frame.origin.y = 0
     }
     //// @@@@@@@@@@@@@@@@@@@@@  End: KEYBOARD MANIPULATION BLOCK @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     
 /////**************************************************Start ********************************************
     
-    // MARK: Step: 2a: IBACTION: imagePickerController for delegate. ImagePickerControllerDelegate methods in order to get access to an image chosen from the Photo library
+
+
+    //MARK: Step 2a: A new Method to be used for both picture album and camera import
+    func imageSelector(ofType type: UIImagePickerControllerSourceType!) {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.sourceType = type
+        imagePickerController.allowsEditing = true
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    // MARK: Step: 2b: IBACTION: imagePickerController for delegate. ImagePickerControllerDelegate methods in order to get access to an image chosen from the Photo library
     
-//    at first we use UIImagePickerController to pick the photo
-//
-//    afterwords, this controller will return data of the image in UIImage type, the image was already in the dictionary.
-//
-//    info[UIImagePickerControllerOriginalImage] as? UIImage
-//
-//    but the type of the image in the dictionary is any so we need to cast any to the image. We use pickerController.delegate = self to tell the picker controller that we want to get the data of the image in current View Controller. The value in the info dictionary is optional because sometime we can't get the data due to the permission etc. Therefore, we have to downcast the value to UIImage because the type of info is [String: any].
-
-
+    //    at first we use UIImagePickerController to pick the photo
+    //
+    //    afterwords, this controller will return data of the image in UIImage type, the image was already in the dictionary.
+    //
+    //    info[UIImagePickerControllerOriginalImage] as? UIImage
+    //
+    //    but the type of the image in the dictionary is any so we need to cast any to the image. We use pickerController.delegate = self to tell the picker controller that we want to get the data of the image in current View Controller. The value in the info dictionary is optional because sometime we can't get the data due to the permission etc. Therefore, we have to downcast the value to UIImage because the type of info is [String: any].
+    
     @IBAction func PickAnImage(_ sender: Any) {
         print("***PhotoLib Button Pressed***")
-        let pickerController = UIImagePickerController()
-        //// Setting the Delegate before launching the image picker
-        pickerController.delegate = self
-        pickerController.sourceType = UIImagePickerControllerSourceType.photoLibrary
-        pickerController.allowsEditing = true
-        ///Presenting the pickercontroller in animated way
-        self.present(pickerController, animated: true, completion: nil)
-        
+        imageSelector(ofType: .photoLibrary)
     }
 
         func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]){
         
-        // The dictionary key for the original version of the selected image: retreives image from the image picker, puts in your imagePickerView
+
+// The dictionary key for the original version of the selected image: retreives image from the image picker, puts in your imagePickerView
         if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
             ImagePickerView.image = image /// NOw, the Outlet is going to have the picked image, image displayed.
             // Happy Face
@@ -183,22 +206,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         self.dismiss(animated: true, completion: nil)
     }
-// MARK: Step: 2b IBACTION :Image Picker action from Camera, ImagePickerControllerDelegate methods
+// MARK: Step: 2c IBACTION :Image Picker action from Camera, ImagePickerControllerDelegate methods
 
     @IBAction func CameraInput(_ sender: Any) {
         print("***Camera Button Pressed***")
-        let CameraController = UIImagePickerController()
-        //// Setting the Delegate before launching the image picker
-        CameraController.delegate = self
-        CameraController.allowsEditing = true
-        CameraController.sourceType = UIImagePickerControllerSourceType.camera
-        ///Presenting the Camera Controller in animated way
-        self.present(CameraController, animated: true, completion: nil)
-        
+        imageSelector(ofType: .camera)
     }
     
 
-    // MARK: Step: 2c: Calling 2nd of the 2 optional methods of the Delegate method that dismisses the choice.
+    // MARK: Step: 2d: Calling 2nd of the 2 optional methods of the Delegate method that dismisses the choice.
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
         
         // dismisses the image picker
@@ -280,3 +296,5 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         print("User cancelled the image picking action")
     }
 }
+
+
