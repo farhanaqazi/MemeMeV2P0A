@@ -9,9 +9,9 @@
 
 import UIKit
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class MemeEditorViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
-////****************** Start-THE OUTLETS BLOCK  ***************************
+    ////****************** Start-THE OUTLETS BLOCK  ***************************
     
     // MARK: Step 1a: The Outlets for both of the Textfields
     @IBOutlet weak var topText: UITextField!
@@ -25,9 +25,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // MARK: Step 1c: The Outlet for the Navigational Bar
     @IBOutlet weak var navigationalBar: UINavigationBar!
     
-////****************** End-THE OUTLETS BLOCK  ***************************
+    ////****************** End-THE OUTLETS BLOCK  ***************************
     
-/// @@@@@@@@@@@@@@@@@@@@@  Start: Meme Text MANIPULATION BLOCK @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    /// @@@@@@@@@@@@@@@@@@@@@  Start: Meme Text MANIPULATION BLOCK @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     
     // MARK: Step: 3a: Define the new Dictionary for the text attributes to be added for this Meme V1.0 app
     
@@ -36,12 +36,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         NSAttributedStringKey.foregroundColor.rawValue: UIColor.white,
         NSAttributedStringKey.font.rawValue: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,NSAttributedStringKey.strokeWidth.rawValue: -6]
     
-
+    
     
     // MARK: Step: 3b:When a user presses return, the keyboard should be dismissed.
     //resignFirstResponder is a method that is defined in a class UIResponder. As textfield are created out of subclass of UITextfield. bottomtextfield or toptextfield are using a method, not from its parent class UITextfield, but a method from outside its class, i-e from class UIResponder. you can check the parent of UITextField by rightclick on the UITextField and choose Jump to Definition you will see UITextField extends UIControl UIControl extends UIView UIView extends UIResponder, that's the reason why we can use resignFirstRespond for the UITextField. So in other words, UIResponder is subclass of UIView who is subclass of UIControl which ends up being a parent class of UITextfield.
     
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         topText.resignFirstResponder()
         bottomText.resignFirstResponder()
@@ -58,7 +58,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         if bottomText.text == "BOTTOM" {
             bottomText.text = ""}
     }
-/////**************************************** END:  Textfield manipulation block  **********************************************************
+    /////**************************************** END:  Textfield manipulation block  **********************************************************
     
     
     // MARK: Step4.1:  viewDidLoad Called with both textfield delegates, code to enable camera button & Text Attribute
@@ -74,20 +74,20 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         
         
-//
-//        topText.text = "TOP"
-//        bottomText.text = "BOTTOM"
-//        topText.defaultTextAttributes = memeTextV1
-//        bottomText.defaultTextAttributes = memeTextV1
-//        topText.textAlignment = NSTextAlignment.center
-//        bottomText.textAlignment = NSTextAlignment.center
+        //
+        //        topText.text = "TOP"
+        //        bottomText.text = "BOTTOM"
+        //        topText.defaultTextAttributes = memeTextV1
+        //        bottomText.defaultTextAttributes = memeTextV1
+        //        topText.textAlignment = NSTextAlignment.center
+        //        bottomText.textAlignment = NSTextAlignment.center
         
         ImagePickerView.contentMode = .scaleAspectFit
         
     }
     //MARK: Step4.2: Configuring text fields function, Handles and assigns default
     // text attrubutes to newly defined text attribute Dictionary in Step 2
-
+    
     func configureTextFields(textField: UITextField, text: String!){
         textField.defaultTextAttributes = memeTextV1
         textField.textAlignment = .center
@@ -96,7 +96,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         textField.text = text
     }
     
-/////********************************************Start *********************************************************
+    /////********************************************Start *********************************************************
     
     // MARK: Step5:  Code for Keyboard Adjustments
     
@@ -107,11 +107,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func subscribeToKeyboardNotifications() {
         //Keyboard will show
         NotificationCenter.default.addObserver(self, selector:
-            #selector(ViewController.keyboardWillShow), name:
+            #selector(MemeEditorViewController.keyboardWillShow), name:
             NSNotification.Name.UIKeyboardWillShow, object: nil)
         //Keyboard will hide
         NotificationCenter.default.addObserver(self, selector:
-            #selector(ViewController.keyboardWillHide), name:
+            #selector(MemeEditorViewController.keyboardWillHide), name:
             NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     // MARK: Step6:  viewWillAppear. Disabling the camera button for non camera devices ,Subscribing to keyboard notification
@@ -142,7 +142,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         unsubscribeFromKeyboardNotifications()
     }
     
-
+    
     
     // MARK: Step7c:  This method gets the keyboard height
     func getKeyboardHeight(notification: NSNotification) -> CGFloat {
@@ -154,9 +154,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     // MARK: Step7d: Shows KeyBoard and calls the method defined earlier getkeyboardheight
     @objc func keyboardWillShow(_ notification:Notification) {
         if bottomText.isFirstResponder{
-        
-        view.frame.origin.y -= getKeyboardHeight(notification: notification as NSNotification)
-    }
+            
+            view.frame.origin.y -= getKeyboardHeight(notification: notification as NSNotification)
+        }
     }
     // MARK: Step7e: This method Hides the keyboard
     @objc func keyboardWillHide(notification: NSNotification)
@@ -166,10 +166,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
     //// @@@@@@@@@@@@@@@@@@@@@  End: KEYBOARD MANIPULATION BLOCK @@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     
-/////**************************************************Start ********************************************
+    /////**************************************************Start ********************************************
     
-
-
+    
+    
     //MARK: Step 2a: A new Method to be used for both picture album and camera import
     func imageSelector(ofType type: UIImagePickerControllerSourceType!) {
         let imagePickerController = UIImagePickerController()
@@ -192,12 +192,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         print("***PhotoLib Button Pressed***")
         imageSelector(ofType: .photoLibrary)
     }
-
-        func imagePickerController(_ picker: UIImagePickerController,
+    
+    func imagePickerController(_ picker: UIImagePickerController,
                                didFinishPickingMediaWithInfo info: [String : Any]){
         
-
-// The dictionary key for the original version of the selected image: retreives image from the image picker, puts in your imagePickerView
+        
+        // The dictionary key for the original version of the selected image: retreives image from the image picker, puts in your imagePickerView
         if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
             ImagePickerView.image = image /// NOw, the Outlet is going to have the picked image, image displayed.
             // Happy Face
@@ -206,14 +206,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         }
         self.dismiss(animated: true, completion: nil)
     }
-// MARK: Step: 2c IBACTION :Image Picker action from Camera, ImagePickerControllerDelegate methods
-
+    // MARK: Step: 2c IBACTION :Image Picker action from Camera, ImagePickerControllerDelegate methods
+    
     @IBAction func CameraInput(_ sender: Any) {
         print("***Camera Button Pressed***")
         imageSelector(ofType: .camera)
     }
     
-
+    
     // MARK: Step: 2d: Calling 2nd of the 2 optional methods of the Delegate method that dismisses the choice.
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController){
         
@@ -221,22 +221,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.dismiss(animated: true, completion: nil)
     }
     
-/////**************************************** END  **********************************************************
+    /////**************************************** END  **********************************************************
     
-  
-
-   
     
-////// ********** Start: Creation and handling of Meme Data object      *************************
     
-    /// Define a Struct to handle data object for the Meme generator app
-    struct Meme {
-        var topText = ""
-        var botText = ""
-        var editedImage: UIImage?
-        var memedImage: UIImage?
-    }
-    /// This method combines the Image and Text
+    
+    
     
     func generateMemedImage() -> UIImage {
         
@@ -256,7 +246,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return memedImage
     }
     
-// Below is a method that initializes a Meme model object
+    // Below is a method that initializes a Meme model object
     func save() {
         // Saves the Meme just created, using the Structure Meme defined earlier.
         _ = Meme(topText: topText.text!, botText: bottomText.text!,
@@ -272,15 +262,15 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
         present(activityViewController, animated: true, completion: nil)
         
-    /// UIActivityViewController class has a completionWithItemsHandler property.
-    /// In the completion handler you can specify methods you would like to be called
-    /// once an activity, like sharing a meme, has been completed.
+        /// UIActivityViewController class has a completionWithItemsHandler property.
+        /// In the completion handler you can specify methods you would like to be called
+        /// once an activity, like sharing a meme, has been completed.
         
-        activityViewController.completionWithItemsHandler = { any_activity, OK , any, any_error in
-            if OK {
+        activityViewController.completionWithItemsHandler = { any_activity, ok , any, any_error in
+            if ok {
                 self.save()
                 
-        //Dismiss the Activity View. Finally, after the Meme object has been saved the activity view will dismiss itself.
+                //Dismiss the Activity View. Finally, after the Meme object has been saved the activity view will dismiss itself.
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -288,7 +278,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         print("Share Button Pressed")
         
     }
-/// ************************* End Meme Handler object  *********************
+    /// ************************* End Meme Handler object  *********************
     
     
     @IBAction func cancelButton(_ sender: Any) {
