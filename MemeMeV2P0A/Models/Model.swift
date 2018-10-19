@@ -18,3 +18,4 @@ struct Meme {
     var memedImage: UIImage?
 }
 /// This method combines the Image and Text
+
