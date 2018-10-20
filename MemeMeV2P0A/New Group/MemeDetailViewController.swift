@@ -36,8 +36,8 @@ class MemeDetailViewController: UIViewController {
         
         self.present(memeEditVC, animated: true, completion: nil)
         
-        memeEditVC.topText.text = memes.topText
-        memeEditVC.bottomText.text = memes.botText
+        memeEditVC.topText.text = memes.topText!
+        memeEditVC.bottomText.text = memes.botText!
         memeEditVC.ImagePickerView.image = memes.editedImage
         memeEditVC.isEditing = true
     }

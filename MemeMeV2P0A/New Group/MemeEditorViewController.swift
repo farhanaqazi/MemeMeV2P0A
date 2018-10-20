@@ -291,6 +291,7 @@ let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
     
     
     @IBAction func cancelButton(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
         ImagePickerView.image = nil
         print("User cancelled the image picking action")
     }
