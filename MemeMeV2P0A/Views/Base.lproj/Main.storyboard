@@ -270,7 +270,7 @@
         <!--MemeDetailViewController-->
         <scene sceneID="xb7-bB-Xju">
             <objects>
-                <viewController title="MemeDetailViewController" id="drl-pt-YlC" customClass="MemeDetailViewController" customModule="MemeMeV2P0A" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MemeDetailViewController" title="MemeDetailViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="drl-pt-YlC" customClass="MemeDetailViewController" customModule="MemeMeV2P0A" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="bTz-k8-WSv">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
